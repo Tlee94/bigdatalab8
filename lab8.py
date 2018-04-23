@@ -8,7 +8,7 @@ def restaurants(sc):
     df = df.read.load('nyc_restaurants.csv',
                       format='csv',
                       header=True,
-                      inferSchema=True)
+                      inferSchema=True).cache()
 
     dfrestaurants = df.groupBy('`CUISINE DESCRIPTION`').count()
     dfrestaurants = dfrestaurants.sort(['count'], ascending=False)
