@@ -6,8 +6,8 @@ from pyspark.sql import SparkSession
 
 if __name__ == '__main__':
     # Set the encoding to UTF-8
-    reload(sys)
-    sys.setdefaultencoding('utf8')
+    #reload(sys)
+    #sys.setdefaultencoding('utf8')
 
     # Create a SparkContext object and execute the main() function
     sc = SparkContext()
