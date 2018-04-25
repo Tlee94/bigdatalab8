@@ -11,12 +11,11 @@ if __name__ == '__main__':
 
     # Create a SparkContext object and execute the main() function
     sc = SparkContext()
-    df = SparkSession(sc)
-    df = df.read.csv('nyc_restaurants.csv',
-                      format='csv',
+    spark = SparkSession(sc)
+    dfrestaurants = spark.read.csv('nyc_restaurants.csv',
                       header=True,
                       inferSchema=True)
 
-    dfrestaurants = df.groupBy('`CUISINE DESCRIPTION`').count()
-    dfrestaurants = dfrestaurants.sort(['count'], ascending=False)
+    dfrestaurants = dfrestaurants.groupBy('`CUISINE DESCRIPTION`').count()
+    dfrestaurants = dfrestaurants.sort('count', ascending=False)
     dfrestaurants.show(85)
