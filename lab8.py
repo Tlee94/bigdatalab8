@@ -1,23 +1,28 @@
-    # Timothy Lee
 import sys
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 
-def restaurants(sc):
-    df = SparkSession(sc)
-    df = df.read.load('nyc_restaurants.csv',
-                      format='csv',
-                      header=True,
-                      inferSchema=True).cache()
 
-    dfrestaurants = df.groupBy('`CUISINE DESCRIPTION`').count()
-    dfrestaurants = dfrestaurants.sort(['count'], ascending=False)
-    dfrestaurants.show(85)
+def group_restaurants(sc):
+    # Create a SparkSession object with sc SparkContext as its argument
+    spark = SparkSession(sc)
+
+    # Load the csv file with the appropriate configurations
+    rest_df = spark.read.csv('nyc_restaurants.csv', header=True, inferSchema=True).cache()
+
+    # Perform aggregate operation by `CUISINE_DESCRIPTION` column and sort the result
+    rest_df = rest_df.groupBy('CUISINE DESCRIPTION').count()
+    rest_df = rest_df.sort('count', ascending=False)
+
+    # Show all categories of restaurants and associated number of restaurants
+    rest_df.show(n=rest_df.count(), truncate=False)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    # Set the encoding to UTF-8
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
+    # Create a SparkContext object and execute the main() function
     sc = SparkContext()
-    # Execute Main functionality
-    restaurants(sc)
-
-
+    group_restaurants(sc)
